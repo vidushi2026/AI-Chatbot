@@ -85,3 +85,15 @@ A phase-wise architecture for a Retrieval-Augmented Generation (RAG) chatbot des
         - Sample queries return valid, attributed answers.
         - Source link integrity is maintained.
 - **Reporting**: Full execution logs are maintained in `scheduler.log`.
+---
+
+## Phase 6: Streamlit Deployment (Optional)
+**Purpose**: Provide a scalable, easy-to-deploy interface for cloud hosting.
+
+### Components:
+- **Application**: `streamlit_app.py` acting as a wrapper for the `GrowwChatbot`.
+- **Features**:
+    - Custom styled suggestion buttons.
+    - Markdown-rendered clickable links.
+    - Session state for chat history.
+- **Dependencies**: Defined in `requirements.txt`.

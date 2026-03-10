@@ -1,168 +1,141 @@
 import streamlit as st
 import os
 import sys
-import json
+import time
 from datetime import datetime
 
-# Add project root to path
+# Add project root to path to import chatbot
 sys.path.append(os.path.dirname(__file__))
-
 from phase_3_retrieval_generation.chatbot import GrowwChatbot
 
-# Configure Page
+# Page configuration
 st.set_page_config(
     page_title="Groww FAQ Assistant",
     page_icon="🤖",
     layout="centered"
 )
 
-# Load CSS
-css_path = os.path.join("phase_4_frontend_backend", "static", "style.css")
-if os.path.exists(css_path):
-    with open(css_path, "r") as f:
-        custom_css = f.read()
-        st.markdown(f"<style>{custom_css}</style>", unsafe_allow_html=True)
-
-# Additional Streamlit-specific overrides for better UI integration
+# Custom CSS for Groww Branding
 st.markdown("""
 <style>
+    :root {
+        --groww-green: #00d09c;
+        --groww-dark: #1e2232;
+    }
     .stApp {
-        background-color: #eef2f5;
+        background-color: #f8fafc;
     }
-    .main .block-container {
-        padding-top: 2rem;
-        max-width: 450px;
+    .main {
+        max-width: 800px;
+        margin: 0 auto;
     }
-    header[data-testid="stHeader"] {
-        display: none;
+    h1 {
+        color: var(--groww-dark);
+        font-weight: 700;
     }
-    footer {
-        display: none;
+    .stButton>button {
+        background-color: white;
+        color: var(--groww-green);
+        border: 1px solid var(--groww-green);
+        border-radius: 20px;
+        padding: 5px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
     }
-    [data-testid="stForm"] {
-        border: none;
-        padding: 0;
+    .stButton>button:hover {
+        background-color: var(--groww-green);
+        color: white;
+        border-color: var(--groww-green);
+    }
+    .chat-link {
+        color: var(--groww-green);
+        text-decoration: underline;
+        font-weight: 500;
+    }
+    .disclaimer {
+        font-size: 0.8rem;
+        color: #64748b;
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+        border-top: 1px solid #e2e8f0;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # Initialize Chatbot
-if 'chatbot' not in st.session_state:
+if "chatbot" not in st.session_state:
     st.session_state.chatbot = GrowwChatbot()
 
-# Initialize Chat History
-if 'messages' not in st.session_state:
+if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Header HTML
-st.markdown("""
-    <div class="chat-header">
-        <div class="bot-info">
-            <div class="bot-avatar">
-                <img src="https://groww.in/logo-light-groww.ratul.svg" alt="Bot"
-                    onerror="this.src='https://img.icons8.com/isometric/50/bot.png'">
-                <span class="status-dot"></span>
-            </div>
-            <div class="bot-text">
-                <h1 style='margin:0; padding:0; line-height:1;'>Groww ChatBot</h1>
-                <span class="status-text">Online</span>
-            </div>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+# Sidebar/Footer Info
+def get_last_updated():
+    try:
+        path = os.path.join(os.path.dirname(__file__), 'phase_4_frontend_backend', 'static', 'last_updated.txt')
+        if os.path.exists(path):
+            with open(path, 'r') as f:
+                return f.read().strip()
+    except:
+        pass
+    return "2026-03-10"
 
-# Chat messages container
-st.markdown('<div class="chat-messages" id="chat-messages">', unsafe_allow_html=True)
+# Header
+st.title("Groww FAQ Assistant")
+st.write("Hello, welcome to Groww FAQ Assistant! 👋 How can I help you today?")
 
-# Helper to format response with links
-def format_response(text):
-    import re
-    if not text: return ""
-    url_regex = r'(https?://[^\s]+)'
-    formatted = re.sub(url_regex, r'<a href="\1" target="_blank" class="chat-link" rel="noopener noreferrer">\1</a>', text)
-    return formatted.replace('\n', '<br>')
+# Suggestions
+st.write("### Try asking:")
+cols = st.columns(3)
+suggestions = [
+    "What is the expense ratio of Motilal Oswal Midcap Fund?",
+    "What is the minimum SIP for Motilal Oswal Large and Midcap Fund?",
+    "What is the exit load on Motilal Oswal ELSS Tax Saver Fund?"
+]
 
-# Initial Welcome Messages
-if not st.session_state.messages:
-    welcome_messages = [
-        {"role": "bot", "content": "Hello, welcome to Groww FAQ Assistant! 👋"},
-        {"role": "bot", "content": "How can I help you today?"}
-    ]
-    for msg in welcome_messages:
-        st.session_state.messages.append(msg)
+selected_suggestion = None
+for i, suggestion in enumerate(suggestions):
+    if cols[i].button(suggestion, key=f"sug_{i}"):
+        selected_suggestion = suggestion
 
-# Display Messages
-for msg in st.session_state.messages:
-    role = msg["role"]
-    content = format_response(msg["content"])
-    avatar_symbol = "🤖" if role == "bot" else "👤"
-    
-    st.markdown(f"""
-        <div class="message {role}">
-            <div class="avatar-small">{avatar_symbol}</div>
-            <div class="message-content">
-                <p>{content}</p>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+# Chat interface
+for message in st.session_state.messages:
+    with st.chat_message(message["role"], avatar="🤖" if message["role"]=="assistant" else "👤"):
+        st.markdown(message["content"], unsafe_allow_html=True)
 
-# Last Updated Timestamp
-last_updated_path = os.path.join("phase_4_frontend_backend", "static", "last_updated.txt")
-last_updated_text = ""
-if os.path.exists(last_updated_path):
-    with open(last_updated_path, "r") as f:
-        last_updated_text = f.read().strip()
+# Input handling
+prompt = st.chat_input("Ask a factual question about mutual funds...")
+if selected_suggestion:
+    prompt = selected_suggestion
 
-# Footer / Suggestions
-if len(st.session_state.messages) <= 2:
-    st.markdown("""
-        <div class="suggestion-chips" style="padding-left: 40px; margin-bottom: 20px;">
-            <p style="font-size: 12px; color: #7c7e8c; margin-bottom: 8px;">Try asking:</p>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns([1,1,1])
-    
-    suggestions = [
-        "What is the expense ratio of Motilal Oswal Midcap Fund?",
-        "What is the minimum SIP for Motilal Oswal Large and Midcap Fund?",
-        "What is the exit load on Motilal Oswal ELSS Tax Saver Fund?"
-    ]
-    
-    if col1.button("📈 Expense Ratio"):
-        prompt = suggestions[0]
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.spinner("🤖 Thinking..."):
-            response = st.session_state.chatbot.chat(prompt)
-            st.session_state.messages.append({"role": "bot", "content": response})
-        st.rerun()
-        
-    if col2.button("💰 Minimum SIP"):
-        prompt = suggestions[1]
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.spinner("🤖 Thinking..."):
-            response = st.session_state.chatbot.chat(prompt)
-            st.session_state.messages.append({"role": "bot", "content": response})
-        st.rerun()
-
-    if col3.button("🔒 Exit Load"):
-        prompt = suggestions[2]
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.spinner("🤖 Thinking..."):
-            response = st.session_state.chatbot.chat(prompt)
-            st.session_state.messages.append({"role": "bot", "content": response})
-        st.rerun()
-
-st.markdown(f"""
-    <div class="disclaimer">Facts-only. No investment advice. Last updated: {last_updated_text}</div>
-""", unsafe_allow_html=True)
-
-# Chat Input
-if prompt := st.chat_input("Send a message..."):
+if prompt:
+    # Add user message
     st.session_state.messages.append({"role": "user", "content": prompt})
-    
-    with st.spinner("🤖 Thinking..."):
-        response = st.session_state.chatbot.chat(prompt)
-        st.session_state.messages.append({"role": "bot", "content": response})
-    
-    st.rerun()
+    with st.chat_message("user", avatar="👤"):
+        st.markdown(prompt)
+
+    # Generate response
+    with st.chat_message("assistant", avatar="🤖"):
+        with st.spinner("Thinking..."):
+            response_text = st.session_state.chatbot.chat(prompt)
+            
+            # Simple conversion of links to clickable HTML in markdown
+            import re
+            url_regex = r"(https?://[^\s]+)"
+            formatted_response = re.sub(url_regex, r'<a href="\1" target="_blank" class="chat-link">\1</a>', response_text)
+            formatted_response = formatted_response.replace("\n", "<br>")
+            
+            st.markdown(formatted_response, unsafe_allow_html=True)
+            st.session_state.messages.append({"role": "assistant", "content": formatted_response})
+            # Force rerun to clear suggestion if used (Streamlit quirk)
+            if selected_suggestion:
+                st.rerun()
+
+# Disclaimer
+st.markdown(f"""
+<div class="disclaimer">
+    Facts-only. No investment advice.<br>
+    Last updated from sources: {get_last_updated()}
+</div>
+""", unsafe_allow_html=True)

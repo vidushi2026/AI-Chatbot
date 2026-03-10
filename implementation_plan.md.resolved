@@ -1,0 +1,36 @@
+# Implementation Plan: Streamlit Deployment and GitHub Integration
+
+**Goal**: Deploy the Groww RAG Chatbot on Streamlit Cloud without altering the premium UI, and establish a GitHub repository for the project.
+
+## Proposed Changes
+
+### [Streamlit Deployment]
+
+#### [NEW] [streamlit_app.py](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/streamlit_app.py)
+- **Engine**: Integrate [GrowwChatbot](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/phase_3_retrieval_generation/chatbot.py#23-91) and [SimpleIndexer](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/phase_2_processing_indexing/indexer.py#4-40) directly into the Streamlit app.
+- **UI Preservation**: Use `st.markdown(..., unsafe_allow_html=True)` to inject the exact [style.css](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/phase_4_frontend_backend/static/style.css) and render the chat container.
+- **State Management**: Use `st.session_state` to store message history.
+- **Interaction**: Use `st.chat_input` (or a custom hidden input bridge) to handle user queries while maintaining the bot's visual style.
+- **Features**: Implement the suggestion chips as clickable Streamlit buttons that trigger the chat logic.
+
+#### [NEW] [requirements.txt](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/requirements.txt)
+- List dependencies: `streamlit`, `groq`, `python-dotenv`.
+
+### [GitHub Integration]
+
+#### [ACTION] Git Initialisation
+- `git init` in the root directory.
+- Create `.gitignore` to exclude [.env](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/.env), `__pycache__`, and temporary files.
+- `git add .` and `git commit -m "Initial commit: Groww RAG Chatbot with Streamlit support"`.
+
+## Verification Plan
+
+### Automated Tests
+- Run `streamlit run streamlit_app.py` locally.
+- Verify that the UI looks identical to the original version (avatars, colors, layout).
+- Verify that suggestion chips work.
+- Verify that the RAG pipeline answers correctly with source links.
+
+### Manual Verification
+- Test long-form answers to ensure the 3-sentence constraint and clickable links are preserved.
+- Verify that the "Last updated" timestamp appears correctly in the footer.
