@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import sys
 import time
+import re
 from datetime import datetime
 
 # Add project root to path to import chatbot
@@ -34,15 +35,17 @@ st.markdown("""
     h1 {
         color: #1e2232 !important;
         font-weight: 700 !important;
-        font-size: 2.5rem !important;
+        font-size: 2.2rem !important;
         letter-spacing: -0.02em;
         margin-bottom: 0.5rem !important;
+        text-align: center;
     }
     
     .subtitle {
         color: #475569;
         font-size: 1.1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        text-align: center;
     }
 
     /* Suggestion Pills */
@@ -51,20 +54,22 @@ st.markdown("""
         color: #00d09c;
         border: 1.5px solid #00d09c;
         border-radius: 50px;
-        padding: 0.4rem 1.2rem;
+        padding: 0.5rem 1.2rem;
         font-weight: 500;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         width: 100%;
         height: auto;
+        min-height: 3rem;
         white-space: normal;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.2;
     }
     
     .stButton>button:hover {
         background-color: #00d09c;
         color: #ffffff;
-        box-shadow: 0 4px 12px rgba(0, 208, 156, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 208, 156, 0.15);
         transform: translateY(-1px);
     }
 
@@ -72,15 +77,17 @@ st.markdown("""
     [data-testid="stChatMessage"] {
         background-color: #f8fafc;
         border-radius: 16px;
-        padding: 1.2rem;
-        margin-bottom: 1rem;
-        border: 1px solid #e2e8f0;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     [data-testid="stChatMessageContent"] p {
         color: #1e2232 !important;
         font-size: 1rem !important;
         line-height: 1.6 !important;
+        margin-bottom: 0 !important;
     }
 
     .chat-link {
@@ -94,29 +101,23 @@ st.markdown("""
         border-bottom-color: #00d09c;
     }
 
-    /* Input area */
-    [data-testid="stChatInput"] {
-        border-top: 1px solid #e2e8f0;
-        background: white;
-        padding-top: 1rem;
-    }
-
     /* Footer / Disclaimer */
     .footer-container {
         text-align: center;
-        padding: 2rem 0;
-        margin-top: 3rem;
+        padding: 2.5rem 0;
+        margin-top: 4rem;
         border-top: 1px solid #f1f5f9;
     }
     .disclaimer-text {
         font-size: 0.85rem;
         color: #94a3b8;
-        font-weight: 500;
+        font-weight: 600;
+        letter-spacing: 0.02em;
     }
     .update-text {
         font-size: 0.75rem;
         color: #cbd5e1;
-        margin-top: 0.5rem;
+        margin-top: 0.6rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -143,15 +144,57 @@ def get_last_updated():
 st.markdown('<h1>Groww FAQ Assistant</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Hello, welcome to Groww FAQ Assistant! 👋 How can I help you today?</p>', unsafe_allow_html=True)
 
-# Suggestions
-st.markdown('<p style="font-weight: 600; color: #1e2232; margin-bottom: 0.5rem;">Try asking:</p>', unsafe_allow_html=True)
+# Suggestions Logic
+st.markdown('<p style="font-weight: 600; color: #334155; margin-bottom: 0.8rem; text-align:center;">Quick Suggestions</p>', unsafe_allow_html=True)
 cols = st.columns(3)
-# ... (rest of suggestions)
-# ...
+suggestions = [
+    "What is the expense ratio of Motilal Oswal Midcap Fund?",
+    "What is the minimum SIP for Motilal Oswal Large and Midcap Fund?",
+    "What is the exit load on Motilal Oswal ELSS Tax Saver Fund?"
+]
+
+selected_suggestion = None
+for i, suggestion in enumerate(suggestions):
+    if cols[i].button(suggestion, key=f"sug_{i}"):
+        selected_suggestion = suggestion
+
+# Chat interface
+for message in st.session_state.messages:
+    with st.chat_message(message["role"], avatar="🤖" if message["role"]=="assistant" else "👤"):
+        st.markdown(message["content"], unsafe_allow_html=True)
+
+# Input handling
+prompt = st.chat_input("Ask a factual question about mutual funds...")
+if selected_suggestion:
+    prompt = selected_suggestion
+
+if prompt:
+    # Add user message
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user", avatar="👤"):
+        st.markdown(prompt)
+
+    # Generate response
+    with st.chat_message("assistant", avatar="🤖"):
+        with st.spinner("Analyzing Groww records..."):
+            response_text = st.session_state.chatbot.chat(prompt)
+            
+            # Formatting: Turn links into clickable HTML and handle newlines
+            url_regex = r"(https?://[^\s]+)"
+            formatted_response = re.sub(url_regex, r'<a href="\1" target="_blank" class="chat-link">\1</a>', response_text)
+            formatted_response = formatted_response.replace("\n", "<br>")
+            
+            st.markdown(formatted_response, unsafe_allow_html=True)
+            st.session_state.messages.append({"role": "assistant", "content": formatted_response})
+            
+            # Streamlit rerun to finalize the view
+            if selected_suggestion:
+                st.rerun()
+
 # Disclaimer
 st.markdown(f"""
 <div class="footer-container">
-    <div class="disclaimer-text">Facts-only. No investment advice.</div>
-    <div class="update-text">Last updated from sources: {get_last_updated()}</div>
+    <div class="disclaimer-text">FACTS-ONLY. NO INVESTMENT ADVICE.</div>
+    <div class="update-text">System Knowledge Last Synchronized: {get_last_updated()}</div>
 </div>
 """, unsafe_allow_html=True)
