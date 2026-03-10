@@ -22,20 +22,20 @@ st.markdown("""
         --groww-green: #00d09c;
         --groww-dark: #1e2232;
     }
-    .stApp {
+    .stApp, [data-testid="stAppViewContainer"] {
+        background-color: white !important;
+    }
     .main {
         max-width: 800px;
         margin: 0 auto;
     }
-    h1, h2, h3 {
-        color: var(--groww-dark) !important;
+    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown span, div[data-testid="stMarkdownContainer"] p {
+        color: #1e2232 !important;
         font-weight: 700;
     }
-    p, span, div.stMarkdown {
-        color: var(--groww-dark) !important;
-    }
-    .stApp {
-        background-color: white;
+    .stMarkdown p, .stMarkdown li {
+        color: #1e2232 !important;
+        font-weight: 400;
     }
     .stButton>button {
         background-color: white;
