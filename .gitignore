@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.log
+*.backup.json
+data_hash.txt
+last_updated.txt

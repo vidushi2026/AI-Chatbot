@@ -1,0 +1,50 @@
+# Walkthrough: Groww RAG Chatbot Final Implementation
+
+We have built a production-ready RAG chatbot architecture for Groww, featuring automated data updates, strict source attribution, and a premium UI.
+
+## Final Project Structure
+```text
+RAG Chatbot/
+├── phase_1_ingestion/
+│   └── ingested_data.json      # Raw scraped data
+├── phase_2_processing_indexing/
+│   ├── processor.py            # Data transformation
+│   ├── processed_data.json     # Cleaned chunks
+│   └── vector_index.json       # Searchable index
+├── phase_3_retrieval_generation/
+│   ├── chatbot.py              # LLM + Retrieval logic
+│   └── prompt_template.py      # AI guardrails
+├── phase_4_frontend_backend/
+│   ├── server.py               # Zero-dependency backend
+│   └── static/                 # Premium UI assets
+└── phase_5_scheduler_pipeline/
+    ├── scheduler.py            # The Orchestrator
+    ├── health_check.py         # System Validator
+    ├── data_hash.txt           # Change detection
+    └── scheduler.log           # Step-by-step logs
+```
+
+## Refined Phase 5: The Scheduler Pipeline
+The final phase ensures the bot is always current:
+1. **Automation**: [scheduler.py](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/phase_5_scheduler_pipeline/scheduler.py) runs every 24 hours (configurable).
+2. **Intelligence**: It uses MD5 hashing to detect actual data changes before expensive re-processing.
+3. **Validation**: Post-update, it runs a suite of tests in [health_check.py](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/phase_5_scheduler_pipeline/health_check.py) to guarantee source link accuracy and retrieval performance.
+4. **UI Integration**: The frontend now displays the exact time of the last successful update.
+
+## Visual Verification
+### 1. The Dashboard (Phase 4)
+The UI features suggestion chips for the requested core queries and a clean disclaimer area.
+![Chat interface with suggestions and clickable links](file:///Users/vidushipatel/.gemini/antigravity/brain/48ff6835-dca3-4269-b0e1-c4b0242a6cab/media_dashboard.png)
+
+### 2. Integration Test Success (Phase 3)
+Confirmed accurate answers with high-speed inference on `llama-3.3-70b-versatile`.
+```bash
+TEST PASSED: Correct value and URL found in response.
+```
+
+## How to Verify
+1.  **Check Logs**: View [scheduler.log](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/phase_5_scheduler_pipeline/scheduler.log).
+2.  **Trigger Update**: Manually change a value in [ingested_data.json](file:///Users/vidushipatel/Documents/Code/RAG%20Chatbot/ingested_data.json) and run `python3 scheduler.py`.
+3.  **UI Sync**: Refresh [http://localhost:8000](http://localhost:8000) to see the "Last updated" timestamp change.
+
+**The Groww RAG Assistant is now fully automated and verified.**

@@ -1,0 +1,78 @@
+{
+    "mutual_funds": [
+        {
+            "name": "Motilal Oswal Large and Midcap Fund Direct Growth",
+            "url": "https://groww.in/mutual-funds/motilal-oswal-large-and-midcap-fund-direct-growth",
+            "expense_ratio": "0.75%",
+            "min_sip": "\u20b9500",
+            "lock_in_period": "None",
+            "exit_load": "1% if redeemed within 365 days",
+            "riskometer": "Very High Risk",
+            "benchmark": "NIFTY Large Midcap 250 TRI"
+        },
+        {
+            "name": "Motilal Oswal ELSS Tax Saver Fund Direct Growth",
+            "url": "https://groww.in/mutual-funds/motilal-oswal-most-focused-long-term-fund-direct-growth",
+            "expense_ratio": "0.67%",
+            "min_sip": "\u20b9500",
+            "lock_in_period": "3 Years",
+            "exit_load": "0%",
+            "riskometer": "Very High Risk",
+            "benchmark": "NIFTY 500 TRI"
+        },
+        {
+            "name": "Motilal Oswal Midcap Fund Direct Growth",
+            "url": "https://groww.in/mutual-funds/motilal-oswal-most-focused-midcap-30-fund-direct-growth",
+            "expense_ratio": "0.82%",
+            "min_sip": "\u20b9500",
+            "lock_in_period": "None",
+            "exit_load": "1% if redeemed within 365 days",
+            "riskometer": "Very High Risk",
+            "benchmark": "NIFTY Midcap 150 TRI"
+        },
+        {
+            "name": "Motilal Oswal Flexi Cap Fund Direct Growth",
+            "url": "https://groww.in/mutual-funds/motilal-oswal-most-focused-multicap-35-fund-direct-growth",
+            "expense_ratio": "0.81%",
+            "min_sip": "\u20b9500",
+            "lock_in_period": "None",
+            "exit_load": "1% if redeemed within 365 days",
+            "riskometer": "Very High Risk",
+            "benchmark": "NIFTY 500 TRI"
+        },
+        {
+            "name": "Motilal Oswal Nifty 500 Index Fund Direct Growth",
+            "url": "https://groww.in/mutual-funds/motilal-oswal-nifty-500-index-fund-direct-growth",
+            "expense_ratio": "0.17%",
+            "min_sip": "\u20b9500",
+            "lock_in_period": "None",
+            "exit_load": "1% if redeemed within 15 days",
+            "riskometer": "Very High Risk",
+            "benchmark": "NIFTY 500 Index"
+        }
+    ],
+    "guides": [
+        {
+            "title": "How to download capital gains statement",
+            "steps": [
+                "Open Groww App/Web",
+                "Go to Profile (You) -> Reports",
+                "Select 'Tax Filing' or 'Reports' section",
+                "Find 'Capital Gain' or 'Capital Gain (Mutual Funds)'",
+                "Select Financial Year and Download",
+                "PDF Password: PAN in CAPITAL letters"
+            ]
+        }
+    ],
+    "amc_documents": [
+        "https://groww.in/mutual-funds/amc/motilal-oswal-mutual-funds",
+        "https://groww.in/mutual-funds/motilal-oswal-mutual-fund",
+        "https://groww.in/mutual-funds/motilal-oswal-large-and-midcap-fund-direct-growth",
+        "https://groww.in/mutual-funds/motilal-oswal-most-focused-long-term-fund-direct-growth",
+        "https://groww.in/mutual-funds/motilal-oswal-most-focused-midcap-30-fund-direct-growth",
+        "https://groww.in/mutual-funds/motilal-oswal-most-focused-multicap-35-fund-direct-growth",
+        "https://groww.in/mutual-funds/motilal-oswal-nifty-500-index-fund-direct-growth",
+        "https://groww.in/mutual-funds/compare/motilal-oswal-large-and-midcap-fund-direct-growth",
+        "https://groww.in/mutual-funds/compare/motilal-oswal-most-focused-long-term-fund-direct-growth"
+    ]
+}

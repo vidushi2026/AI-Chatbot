@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groww FAQ Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="chat-container">
+        <header class="chat-header">
+            <div class="bot-info">
+                <div class="bot-avatar">
+                    <img src="https://groww.in/logo-light-groww.ratul.svg" alt="Bot"
+                        onerror="this.src='https://img.icons8.com/isometric/50/bot.png'">
+                    <span class="status-dot"></span>
+                </div>
+                <div class="bot-text">
+                    <h1>Groww ChatBot</h1>
+                    <span class="status-text">Online</span>
+                </div>
+            </div>
+            <button class="close-btn">&times;</button>
+        </header>
+
+        <main class="chat-messages" id="chat-messages">
+            <!-- Initial Welcome -->
+            <div class="message bot">
+                <div class="avatar-small">🤖</div>
+                <div class="message-content">
+                    <p>Hello, welcome to Groww FAQ Assistant! 👋</p>
+                </div>
+            </div>
+            <div class="message bot">
+                <div class="avatar-small">🤖</div>
+                <div class="message-content">
+                    <p>How can I help you today?</p>
+                    <div class="suggestion-chips">
+                        <button class="chip"
+                            onclick="sendSuggestion('What is the expense ratio of Motilal Oswal Midcap Fund?')">📈 What
+                            is the expense ratio of Motilal Oswal Midcap Fund?</button>
+                        <button class="chip"
+                            onclick="sendSuggestion('What is the minimum SIP for Motilal Oswal Large and Midcap Fund?')">💰
+                            What is the minimum SIP for Motilal Oswal Large and Midcap Fund?</button>
+                        <button class="chip"
+                            onclick="sendSuggestion('What is the exit load on Motilal Oswal ELSS Tax Saver Fund?')">🔒
+                            What is the exit load on Motilal Oswal ELSS Tax Saver Fund?</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="chat-footer">
+            <div class="disclaimer">Facts-only. No investment advice.</div>
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Send a message..." autocomplete="off">
+                <button id="send-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"></path>
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

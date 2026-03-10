@@ -1,0 +1,244 @@
+:root {
+    --groww-green: #00d09c;
+    --groww-dark: #1e2232;
+    --bg-light: #f6f7f9;
+    --text-main: #44475b;
+    --text-muted: #7c7e8c;
+    --white: #ffffff;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #eef2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 400px;
+    height: 600px;
+    background: var(--white);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+}
+
+.chat-header {
+    background: var(--white);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.bot-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bot-avatar {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    background: #f0f3f7;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bot-avatar img {
+    width: 25px;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background: #4caf50;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+}
+
+.bot-text h1 {
+    font-size: 18px;
+    color: var(--groww-dark);
+    font-weight: 600;
+}
+
+.status-text {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--bg-light);
+}
+
+.message {
+    display: flex;
+    gap: 8px;
+    max-width: 85%;
+}
+
+.message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.avatar-small {
+    width: 28px;
+    height: 28px;
+    background: #ddd;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.message-content {
+    background: var(--white);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-main);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.user .message-content {
+    background: #ffda00;
+    /* Yellow from reference */
+    color: #444;
+    border-radius: 12px 0 12px 12px;
+    font-weight: 500;
+}
+
+.bot .message-content {
+    border-radius: 0 12px 12px 12px;
+}
+
+.suggestion-chips {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    background: var(--white);
+    border: 1.5px solid #00d09c;
+    color: #008f6b;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(0, 208, 156, 0.05);
+}
+
+.chip:hover {
+    background: var(--groww-green);
+    color: var(--white);
+}
+
+.chat-footer {
+    padding: 15px 20px;
+    background: var(--white);
+    border-top: 1px solid #eee;
+}
+
+.disclaimer {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 10px;
+    background: #f9fafb;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.input-area {
+    display: flex;
+    align-items: center;
+    background: #f0f3f7;
+    border-radius: 25px;
+    padding: 5px 15px;
+}
+
+#user-input {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+#send-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send-btn.active {
+    color: var(--groww-green);
+}
+
+.chat-link {
+    color: var(--groww-green);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.chat-link:hover {
+    color: #008f6b;
+}
+
+/* Custom scrollbar */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+}
