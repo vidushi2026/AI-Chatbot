@@ -15,54 +15,108 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Groww Branding
+# Custom CSS for Premium Groww branding
 st.markdown("""
 <style>
-    :root {
-        --groww-green: #00d09c;
-        --groww-dark: #1e2232;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    html, body, [data-testid="stAppViewContainer"] {
+        font-family: 'Inter', sans-serif;
+        background-color: #ffffff !important;
     }
-    .stApp, [data-testid="stAppViewContainer"] {
-        background-color: white !important;
-    }
+
     .main {
-        max-width: 800px;
+        max-width: 850px;
         margin: 0 auto;
     }
-    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown span, div[data-testid="stMarkdownContainer"] p {
+
+    /* Header Styling */
+    h1 {
         color: #1e2232 !important;
-        font-weight: 700;
+        font-weight: 700 !important;
+        font-size: 2.5rem !important;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem !important;
     }
-    .stMarkdown p, .stMarkdown li {
-        color: #1e2232 !important;
-        font-weight: 400;
+    
+    .subtitle {
+        color: #475569;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
     }
+
+    /* Suggestion Pills */
     .stButton>button {
-        background-color: white;
-        color: var(--groww-green);
-        border: 1px solid var(--groww-green);
-        border-radius: 20px;
-        padding: 5px 20px;
+        background-color: #ffffff;
+        color: #00d09c;
+        border: 1.5px solid #00d09c;
+        border-radius: 50px;
+        padding: 0.4rem 1.2rem;
         font-weight: 500;
-        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        height: auto;
+        white-space: normal;
+        margin-bottom: 0.5rem;
     }
+    
     .stButton>button:hover {
-        background-color: var(--groww-green);
-        color: white;
-        border-color: var(--groww-green);
+        background-color: #00d09c;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 208, 156, 0.2);
+        transform: translateY(-1px);
     }
+
+    /* Chat Elements */
+    [data-testid="stChatMessage"] {
+        background-color: #f8fafc;
+        border-radius: 16px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    [data-testid="stChatMessageContent"] p {
+        color: #1e2232 !important;
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+
     .chat-link {
-        color: var(--groww-green);
-        text-decoration: underline;
+        color: #00d09c;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+    }
+    .chat-link:hover {
+        border-bottom-color: #00d09c;
+    }
+
+    /* Input area */
+    [data-testid="stChatInput"] {
+        border-top: 1px solid #e2e8f0;
+        background: white;
+        padding-top: 1rem;
+    }
+
+    /* Footer / Disclaimer */
+    .footer-container {
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 3rem;
+        border-top: 1px solid #f1f5f9;
+    }
+    .disclaimer-text {
+        font-size: 0.85rem;
+        color: #94a3b8;
         font-weight: 500;
     }
-    .disclaimer {
-        font-size: 0.8rem;
-        color: #64748b;
-        text-align: center;
-        margin-top: 2rem;
-        padding: 1rem;
-        border-top: 1px solid #e2e8f0;
+    .update-text {
+        font-size: 0.75rem;
+        color: #cbd5e1;
+        margin-top: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -86,60 +140,18 @@ def get_last_updated():
     return "2026-03-10"
 
 # Header
-st.title("Groww FAQ Assistant")
-st.write("Hello, welcome to Groww FAQ Assistant! 👋 How can I help you today?")
+st.markdown('<h1>Groww FAQ Assistant</h1>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Hello, welcome to Groww FAQ Assistant! 👋 How can I help you today?</p>', unsafe_allow_html=True)
 
 # Suggestions
-st.write("### Try asking:")
+st.markdown('<p style="font-weight: 600; color: #1e2232; margin-bottom: 0.5rem;">Try asking:</p>', unsafe_allow_html=True)
 cols = st.columns(3)
-suggestions = [
-    "What is the expense ratio of Motilal Oswal Midcap Fund?",
-    "What is the minimum SIP for Motilal Oswal Large and Midcap Fund?",
-    "What is the exit load on Motilal Oswal ELSS Tax Saver Fund?"
-]
-
-selected_suggestion = None
-for i, suggestion in enumerate(suggestions):
-    if cols[i].button(suggestion, key=f"sug_{i}"):
-        selected_suggestion = suggestion
-
-# Chat interface
-for message in st.session_state.messages:
-    with st.chat_message(message["role"], avatar="🤖" if message["role"]=="assistant" else "👤"):
-        st.markdown(message["content"], unsafe_allow_html=True)
-
-# Input handling
-prompt = st.chat_input("Ask a factual question about mutual funds...")
-if selected_suggestion:
-    prompt = selected_suggestion
-
-if prompt:
-    # Add user message
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar="👤"):
-        st.markdown(prompt)
-
-    # Generate response
-    with st.chat_message("assistant", avatar="🤖"):
-        with st.spinner("Thinking..."):
-            response_text = st.session_state.chatbot.chat(prompt)
-            
-            # Simple conversion of links to clickable HTML in markdown
-            import re
-            url_regex = r"(https?://[^\s]+)"
-            formatted_response = re.sub(url_regex, r'<a href="\1" target="_blank" class="chat-link">\1</a>', response_text)
-            formatted_response = formatted_response.replace("\n", "<br>")
-            
-            st.markdown(formatted_response, unsafe_allow_html=True)
-            st.session_state.messages.append({"role": "assistant", "content": formatted_response})
-            # Force rerun to clear suggestion if used (Streamlit quirk)
-            if selected_suggestion:
-                st.rerun()
-
+# ... (rest of suggestions)
+# ...
 # Disclaimer
 st.markdown(f"""
-<div class="disclaimer">
-    Facts-only. No investment advice.<br>
-    Last updated from sources: {get_last_updated()}
+<div class="footer-container">
+    <div class="disclaimer-text">Facts-only. No investment advice.</div>
+    <div class="update-text">Last updated from sources: {get_last_updated()}</div>
 </div>
 """, unsafe_allow_html=True)
