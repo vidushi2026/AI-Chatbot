@@ -23,15 +23,19 @@ st.markdown("""
         --groww-dark: #1e2232;
     }
     .stApp {
-        background-color: #f8fafc;
-    }
     .main {
         max-width: 800px;
         margin: 0 auto;
     }
-    h1 {
-        color: var(--groww-dark);
+    h1, h2, h3 {
+        color: var(--groww-dark) !important;
         font-weight: 700;
+    }
+    p, span, div.stMarkdown {
+        color: var(--groww-dark) !important;
+    }
+    .stApp {
+        background-color: white;
     }
     .stButton>button {
         background-color: white;
